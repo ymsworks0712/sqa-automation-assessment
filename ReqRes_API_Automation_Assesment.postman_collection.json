@@ -1,0 +1,398 @@
+{
+  "info": {
+    "_postman_id": "41d4bbb1-7630-4400-9629-5171891bdbb6",
+    "name": "ReqRes API Automation Assesment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53098046",
+    "_collection_link": "https://go.postman.co/collection/53098046-41d4bbb1-7630-4400-9629-5171891bdbb6?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Q3-Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response contains auth token\", function () {\r",
+              "    pm.expect(response.token).to.exist;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Auth token is not empty\", function () {\r",
+              "    pm.expect(response.token).to.be.a(\"string\");\r",
+              "    pm.expect(response.token).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.environment.set(\"authToken\", response.token);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"eve.holt@reqres.in\",\r\n    \"password\": \"cityslicka\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Q4-GET User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "const user = response.data;\r",
+              "\r",
+              "const expectedFirstName = \"Janet\";\r",
+              "const expectedLastName = \"Weaver\";\r",
+              "const expectedEmail = \"janet.weaver@reqres.in\";\r",
+              "\r",
+              "pm.test(\"User ID matches\", function () {\r",
+              "    pm.expect(user.id).to.eql(2);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"First name matches\", function () {\r",
+              "    pm.expect(user.first_name).to.eql(expectedFirstName);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Last name matches\", function () {\r",
+              "    pm.expect(user.last_name).to.eql(expectedLastName);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Email matches\", function () {\r",
+              "    pm.expect(user.email).to.eql(expectedEmail);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/users/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Q5 - PUT Update User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Updated name is correct\", function () {\r",
+              "    pm.expect(response.name).to.eql(\"Yasin Mahmood Sakib\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Updated job is correct\", function () {\r",
+              "    pm.expect(response.job).to.eql(\"QA Automation Engineer\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"updatedAt exists\", function () {\r",
+              "    pm.expect(response.updatedAt).to.exist;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"updatedAt is not empty\", function () {\r",
+              "    pm.expect(response.updatedAt).to.be.a(\"string\");\r",
+              "    pm.expect(response.updatedAt).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"updatedAt is a valid timestamp\", function () {\r",
+              "    const updatedAt = new Date(response.updatedAt);\r",
+              "\r",
+              "    pm.expect(updatedAt.toString()).to.not.equal(\"Invalid Date\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Yasin Mahmood Sakib\",\r\n    \"job\": \"QA Automation Engineer\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/users/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Q6 - PATCH User",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({\r",
+              "    url: pm.variables.replaceIn('{{base_url}}/api/users/2'),\r",
+              "    method: 'GET',\r",
+              "    header: {\r",
+              "        'x-api-key': pm.environment.get('api_key')\r",
+              "    }\r",
+              "}, function (err, res) {\r",
+              "\r",
+              "    if (err) {\r",
+              "        console.log(\"Failed to get original user:\", err);\r",
+              "        return;\r",
+              "    }\r",
+              "\r",
+              "    const originalUser = res.json().data;\r",
+              "\r",
+              "    pm.environment.set(\"originalName\", originalUser.first_name);\r",
+              "    pm.environment.set(\"originalEmail\", originalUser.email);\r",
+              "\r",
+              "    console.log(\"Original name:\", originalUser.first_name);\r",
+              "    console.log(\"Original email:\", originalUser.email);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Job was updated correctly\", function () {\r",
+              "    pm.expect(response.job).to.eql(\"Senior QA Engineer\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"updatedAt exists\", function () {\r",
+              "    pm.expect(response.updatedAt).to.exist;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"updatedAt is a valid timestamp\", function () {\r",
+              "    const updatedAt = new Date(response.updatedAt);\r",
+              "\r",
+              "    pm.expect(updatedAt.toString()).to.not.equal(\"Invalid Date\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.sendRequest({\r",
+              "    url: pm.variables.replaceIn('{{base_url}}/api/users/2'),\r",
+              "    method: 'GET',\r",
+              "    header: {\r",
+              "        'x-api-key': pm.environment.get('api_key')\r",
+              "    }\r",
+              "}, function (err, res) {\r",
+              "\r",
+              "    if (err) {\r",
+              "        console.log(\"Failed to verify updated user:\", err);\r",
+              "        return;\r",
+              "    }\r",
+              "\r",
+              "    const updatedUser = res.json().data;\r",
+              "\r",
+              "    pm.test(\"Name remained unchanged after PATCH\", function () {\r",
+              "        pm.expect(updatedUser.first_name)\r",
+              "            .to.eql(pm.environment.get(\"originalName\"));\r",
+              "    });\r",
+              "\r",
+              "    pm.test(\"Email remained unchanged after PATCH\", function () {\r",
+              "        pm.expect(updatedUser.email)\r",
+              "            .to.eql(pm.environment.get(\"originalEmail\"));\r",
+              "    });\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"job\": \"Senior QA Engineer\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/users/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Q8 - Bad Request Validation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 4xx\", function () {\r\n    pm.expect(pm.response.code).to.be.within(400, 499);\r\n});"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const originalUserId = pm.environment.get(\"userId\");\r\n\r\nconst invalidUserId = Number(originalUserId) + 999999;\r\n\r\npm.environment.set(\"invalidUserId\", invalidUserId);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/users/{{invalidUserId}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{invalidUserId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
